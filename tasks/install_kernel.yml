@@ -36,6 +36,7 @@
     - elrepo_rel == '7'
 
 - name: Install packages that were initially removed
+  tags: elrepo-release
   yum:
     name: "{{ item }}"
     state: present
