@@ -20,6 +20,11 @@ Available variables are listed below, along with default values:
       elrepo_kernel: False
       elrepo_testing: False
 
+Additional variables that are not defined by default:
+
+    elrepo_kernel_install: True
+    elrepo_kernel_version: ml
+
 All repositories are disabled by default.
 
 ## Dependencies
@@ -31,6 +36,8 @@ None
     - hosts: servers
       roles:
         - role: linuxhq.elrepo
+          elrepo_kernel_install: True
+          elrepo_kernel_version: ml
           elrepo_repos:
             elrepo: True
 
