@@ -50,7 +50,7 @@
       dest: /boot/grub/grub.conf
       regexp: '^default='
       line: 'default=0'
-    when: elrepo_rel < '7'
+    when: elrepo_rel <= '6'
   
   - name: Set the default kernel grub is going to boot (elrepo >= el7)
     shell: "grub2-set-default 0"
