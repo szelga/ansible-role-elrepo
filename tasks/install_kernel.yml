@@ -45,7 +45,7 @@
     - redhat-lsb-languages
 
 - block:
-  - name: Set the default kernel grub is going to boot (elrepo <= el7)
+  - name: Set the default kernel grub is going to boot (elrepo <= el6)
     lineinfile:
       dest: /boot/grub/grub.conf
       regexp: '^default='
