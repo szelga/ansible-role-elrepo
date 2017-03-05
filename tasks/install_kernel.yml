@@ -38,6 +38,7 @@
 - name: Install packages that were initially removed
   tags: elrepo-release
   yum:
+    enablerepo: epel
     name: "{{ item }}"
     state: present
   with_items:

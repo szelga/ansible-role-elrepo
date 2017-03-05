@@ -29,7 +29,7 @@ All repositories are disabled by default.
 
 ## Dependencies
 
-None
+ * https://galaxy.ansible.com/linuxhq/epel/
 
 ## Example Playbook
 
