@@ -9,13 +9,13 @@
 - name: Set elrepo_ver fact (el7)
   tags: elrepo-release
   set_fact:
-    elrepo_ver: "7.0-2.el7"
+    elrepo_ver: "7.0-3.el7"
   when: elrepo_rel == '7'
 
 - name: Set elrepo_ver fact (el6)
   tags: elrepo-release
   set_fact:
-    elrepo_ver: "6-6.el6"
+    elrepo_ver: "6-8.el6"
   when: elrepo_rel == '6'
 
 - name: Set elrepo_ver fact (el5)
