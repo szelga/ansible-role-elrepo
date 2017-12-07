@@ -1,5 +1,5 @@
 ---
-- name: Assert that the required prerequisites are defined
+- name: Assert that the prerequisites are defined
   assert:
     that:
       - elrepo_pkg is defined
