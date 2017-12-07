@@ -54,7 +54,8 @@
       when: elrepo_rel <= '6'
   
     - name: Set the default kernel grub is going to boot (elrepo >= el7)
-      shell: "grub2-set-default 0"
+      shell: |
+        /usr/sbin/grub2-set-default 0
       when: elrepo_rel >= '7'
   become: true
   when: elrepo_kernel_installed|changed
