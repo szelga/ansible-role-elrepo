@@ -20,12 +20,6 @@
     elrepo_ver: "5-5.el5"
   when: elrepo_rel == '5'
 
-- name: Acquiring the ELRepo GPG key
-  become: true
-  rpm_key:
-    state: present
-    key: "https://www.elrepo.org/RPM-GPG-KEY-elrepo.org"
- 
 - name: Generating temporary filename via mktemp
   command: mktemp -u --suffix .rpm
   register: elrepo_mktemp
@@ -55,6 +49,12 @@
     group: root
     mode: 0644
   when: elrepo_yum|success
+
+- name: Ensure that the ELRepo GPG keys are installed
+  become: true
+  rpm_key:
+    key: /etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org
+    state: present
 
 - name: Purging temporary package from filesystem
   file:
