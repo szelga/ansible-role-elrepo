@@ -53,6 +53,7 @@
     name: "{{ item }}"
     state: present
   with_items: "{{ elrepo_packages }}"
+  when: elrepo_packages|length > 0
 
 - name: Set the default kernel grub is going to boot (<= el6)
   become: true
