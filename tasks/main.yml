@@ -11,4 +11,5 @@
   when:
     - ansible_os_family == 'RedHat'
     - elrepo_kernel|bool == true
+    - elrepo_yum|success
 ...
