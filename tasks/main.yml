@@ -1,14 +1,14 @@
 ---
-- name: Executing repository installation tasks
+- name: Executing elrepo repository tasks
   tags: elrepo
-  import_tasks: install_repo.yml
-  when: ansible_os_family == 'RedHat'
-
-- name: Executing kernel installation tasks
-  tags: elrepo
-  import_tasks: install_kernel.yml
+  import_tasks: elrepo_repository.yml
   when:
     - ansible_os_family == 'RedHat'
-    - elrepo_kernel_install is defined
-    - elrepo_kernel_install
+
+- name: Executing elrepo kernel tasks
+  tags: elrepo
+  import_tasks: elrepo_kernel.yml
+  when:
+    - ansible_os_family == 'RedHat'
+    - elrepo_kernel|bool == true
 ...

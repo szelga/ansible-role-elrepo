@@ -1,33 +1,28 @@
 ---
-- name: Assert that the prerequisites are defined
-  assert:
-    that:
-      - elrepo_pkg is defined
-      - elrepo_rel is defined
-
-- name: Setting elrepo_ver fact (el7)
+- name: Setting elrepo_version fact (el7)
   set_fact:
-    elrepo_ver: "7.0-3.el7"
-  when: elrepo_rel == '7'
+    elrepo_version: "7.0-3.el7"
+  when: elrepo_dist == '7'
 
-- name: Setting elrepo_ver fact (el6)
+- name: Setting elrepo_version fact (el6)
   set_fact:
-    elrepo_ver: "6-8.el6"
-  when: elrepo_rel == '6'
+    elrepo_version: "6-8.el6"
+  when: elrepo_dist == '6'
 
-- name: Setting elrepo_ver fact (el5)
+- name: Setting elrepo_version fact (el5)
   set_fact:
-    elrepo_ver: "5-5.el5"
-  when: elrepo_rel == '5'
+    elrepo_version: "5-5.el5"
+  when: elrepo_dist == '5'
 
 - name: Generating temporary filename via mktemp
-  command: mktemp -u --suffix .rpm
+  command: |
+    mktemp -u --suffix .rpm
   register: elrepo_mktemp
 
 - name: Downloading package to temporary location
   get_url:
-    url: "https://www.elrepo.org/{{ elrepo_pkg }}-{{ elrepo_ver }}.elrepo.noarch.rpm"
     dest: "{{ elrepo_mktemp.stdout }}"
+    url: "https://www.elrepo.org/elrepo-release-{{ elrepo_version }}.elrepo.noarch.rpm"
   register: elrepo_get_url
   when: elrepo_mktemp|success
 
@@ -40,7 +35,7 @@
   with_items: "{{ elrepo_mktemp.stdout }}"
   when: elrepo_get_url|success
 
-- name: Applying elrepo.repo configurations
+- name: Applying elrepo repository configurations
   become: true
   template:
     src: elrepo.repo.j2

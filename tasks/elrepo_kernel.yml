@@ -1,0 +1,74 @@
+---
+- name: Removing old kernel packages
+  become: true
+  yum:
+    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - kernel-devel
+    - kernel-tools
+    - kernel-tools-libs
+    - kernel-headers
+
+- name: Appending elrepo-kernel to elrepo_enablerepo list
+  set_fact:
+    elrepo_enablerepo: "{{ elrepo_enablerepo }} + [ 'elrepo-kernel' ]"
+  when: "'elrepo-kernel' not in elrepo_enablerepo"
+
+- name: Ensure that the elrepo kernel packages are installed
+  become: true
+  yum:
+    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    enablerepo: elrepo-kernel
+    name: "{{ item }}"
+    state: present
+  register: elrepo_kernel_installed
+  with_items:
+    - "kernel-{{ elrepo_kernel_version }}"
+    - "kernel-{{ elrepo_kernel_version }}-devel"
+    - "kernel-{{ elrepo_kernel_version }}-headers"
+
+- name: Ensure that the kernel tools packages are installed
+  become: true
+  yum:
+    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "kernel-{{ elrepo_kernel_version }}-tools"
+    - "kernel-{{ elrepo_kernel_version }}-tools-libs"
+  when:
+    - elrepo_kernel_installed|changed
+    - elrepo_dist == '7'
+
+- name: Ensure that the required elrepo packages are installed
+  become: true
+  yum:
+    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ elrepo_packages }}"
+
+- name: Set the default kernel grub is going to boot (<= el6)
+  become: true
+  lineinfile:
+    dest: /boot/grub/grub.conf
+    regexp: '^default='
+    line: 'default=0'
+  when:
+    - elrepo_dist <= '6'
+    - elrepo_kernel_installed|changed
+  
+- name: Set the default kernel grub is going to boot (>= el7)
+  become: true
+  command: |
+    /usr/sbin/grub2-set-default 0
+  when:
+    - elrepo_dist >= '7'
+    - elrepo_kernel_installed|changed
+...
