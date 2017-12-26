@@ -50,6 +50,7 @@
   rpm_key:
     key: /etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org
     state: present
+  when: elrepo_yum|success
 
 - name: Purging temporary package from filesystem
   file:

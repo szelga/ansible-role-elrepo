@@ -22,7 +22,6 @@
   yum:
     disablerepo: "{{ elrepo_disablerepo|join(',') }}"
     enablerepo: "{{ elrepo_enablerepo|join(',') }}"
-    enablerepo: elrepo-kernel
     name: "{{ item }}"
     state: present
   register: elrepo_kernel_installed
