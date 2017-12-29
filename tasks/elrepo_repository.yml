@@ -35,6 +35,14 @@
   with_items: "{{ elrepo_mktemp.stdout }}"
   when: elrepo_get_url|success
 
+- name: Purging temporary package from filesystem
+  file:
+    path: "{{ elrepo_mktemp.stdout }}"
+    state: absent
+  when:
+    - elrepo_mktemp|success
+    - elrepo_yum|success
+
 - name: Applying elrepo repository configurations
   become: true
   template:
@@ -51,12 +59,4 @@
     key: /etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org
     state: present
   when: elrepo_yum|success
-
-- name: Purging temporary package from filesystem
-  file:
-    path: "{{ elrepo_mktemp.stdout }}"
-    state: absent
-  when:
-    - elrepo_mktemp|success
-    - elrepo_yum|success
 ...
