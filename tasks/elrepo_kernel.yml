@@ -44,16 +44,6 @@
     - elrepo_kernel_installed|changed
     - elrepo_dist == '7'
 
-- name: Ensure that the required elrepo packages are installed
-  become: true
-  yum:
-    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
-    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ elrepo_packages }}"
-  when: elrepo_packages|length > 0
-
 - name: Set the default kernel grub is going to boot (<= el6)
   become: true
   lineinfile:
@@ -71,4 +61,16 @@
   when:
     - elrepo_dist >= '7'
     - elrepo_kernel_installed|changed
+
+- name: Ensure that the required elrepo packages are installed
+  become: true
+  yum:
+    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ elrepo_packages }}"
+  when:
+    - elrepo_packages|length > 0
+    - elrepo_yum|success
 ...

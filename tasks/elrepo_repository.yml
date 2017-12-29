@@ -59,4 +59,16 @@
     key: /etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org
     state: present
   when: elrepo_yum|success
+
+- name: Ensure that the required elrepo packages are installed
+  become: true
+  yum:
+    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ elrepo_packages }}"
+  when:
+    - elrepo_packages|length > 0
+    - elrepo_yum|success
 ...
