@@ -16,9 +16,6 @@
     suffix: '.rpm'
   register: elrepo_tempfile
 
-- name: Temp
-  debug: var=elrepo_tempfile
-
 - name: Downloading package to temporary location
   get_url:
     dest: "{{ elrepo_tempfile.path }}"
@@ -30,6 +27,10 @@
 - name: Ensure that the elrepo-release package is installed
   become: true
   yum:
+    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
+    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
     name: "{{ item }}"
     state: present
   register: elrepo_yum
