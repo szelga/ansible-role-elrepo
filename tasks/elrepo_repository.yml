@@ -31,10 +31,9 @@
     disablerepo: "{{ elrepo_disablerepo|join(',') }}"
     enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
     enablerepo: "{{ elrepo_enablerepo|join(',') }}"
-    name: "{{ item }}"
+    name: "{{ elrepo_tempfile.path }}"
     state: present
   register: elrepo_yum
-  with_items: "{{ elrepo_tempfile.path }}"
   when: elrepo_get_url is success
 
 - name: Purging temporary package from filesystem
