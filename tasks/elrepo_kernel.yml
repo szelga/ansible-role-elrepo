@@ -2,7 +2,9 @@
 - name: Removing old kernel packages
   become: true
   yum:
+    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
     disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
     enablerepo: "{{ elrepo_enablerepo|join(',') }}"
     name: "{{ item }}"
     state: absent
@@ -20,7 +22,9 @@
 - name: Ensure that the elrepo kernel packages are installed
   become: true
   yum:
+    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
     disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
     enablerepo: "{{ elrepo_enablerepo|join(',') }}"
     name: "{{ item }}"
     state: present
@@ -33,7 +37,9 @@
 - name: Ensure that the kernel tools packages are installed
   become: true
   yum:
+    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
     disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
     enablerepo: "{{ elrepo_enablerepo|join(',') }}"
     name: "{{ item }}"
     state: present
@@ -41,36 +47,38 @@
     - "kernel-{{ elrepo_kernel_version }}-tools"
     - "kernel-{{ elrepo_kernel_version }}-tools-libs"
   when:
-    - elrepo_kernel_installed|changed
     - elrepo_dist == '7'
+    - elrepo_kernel_installed is changed
 
-- name: Set the default kernel grub is going to boot (<= el6)
+- name: Set the default kernel grub is going to boot (el6)
   become: true
   lineinfile:
     dest: /boot/grub/grub.conf
     regexp: '^default='
     line: 'default=0'
   when:
-    - elrepo_dist <= '6'
-    - elrepo_kernel_installed|changed
-  
-- name: Set the default kernel grub is going to boot (>= el7)
+    - elrepo_dist == '6'
+    - elrepo_kernel_installed is changed
+
+- name: Set the default kernel grub is going to boot (el7)
   become: true
   command: |
     /usr/sbin/grub2-set-default 0
   when:
-    - elrepo_dist >= '7'
-    - elrepo_kernel_installed|changed
+    - elrepo_dist == '7'
+    - elrepo_kernel_installed is changed
 
 - name: Ensure that the required elrepo packages are installed
   become: true
   yum:
+    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
     disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
     enablerepo: "{{ elrepo_enablerepo|join(',') }}"
     name: "{{ item }}"
     state: present
   with_items: "{{ elrepo_packages }}"
   when:
     - elrepo_packages|length > 0
-    - elrepo_yum|success
+    - elrepo_yum is success
 ...

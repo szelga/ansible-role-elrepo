@@ -1,15 +1,11 @@
 ---
-- name: Executing elrepo repository tasks
+- name: Attempting to import elrepo tasks
   tags: elrepo
-  import_tasks: elrepo_repository.yml
-  when:
-    - ansible_os_family == 'RedHat'
-
-- name: Executing elrepo kernel tasks
-  tags: elrepo
-  import_tasks: elrepo_kernel.yml
-  when:
-    - ansible_os_family == 'RedHat'
-    - elrepo_kernel|bool == true
-    - elrepo_yum|success
+  block:
+    - import_tasks: elrepo_repository.yml
+    - import_tasks: elrepo_kernel.yml
+      when:
+        - elrepo_kernel|bool
+        - elrepo_yum is success
+  when: ansible_os_family == 'RedHat'
 ...

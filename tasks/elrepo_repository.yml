@@ -9,22 +9,23 @@
     elrepo_version: "6-8.el6"
   when: elrepo_dist == '6'
 
-- name: Setting elrepo_version fact (el5)
-  set_fact:
-    elrepo_version: "5-5.el5"
-  when: elrepo_dist == '5'
+- name: Attempting to create temporary file
+  tempfile:
+    prefix: 'elrepo.'
+    state: file
+    suffix: '.rpm'
+  register: elrepo_tempfile
 
-- name: Generating temporary filename via mktemp
-  command: |
-    mktemp -u --suffix .rpm
-  register: elrepo_mktemp
+- name: Temp
+  debug: var=elrepo_tempfile
 
 - name: Downloading package to temporary location
   get_url:
-    dest: "{{ elrepo_mktemp.stdout }}"
+    dest: "{{ elrepo_tempfile.path }}"
+    force: yes
     url: "https://www.elrepo.org/elrepo-release-{{ elrepo_version }}.elrepo.noarch.rpm"
   register: elrepo_get_url
-  when: elrepo_mktemp|success
+  when: elrepo_tempfile is success
 
 - name: Ensure that the elrepo-release package is installed
   become: true
@@ -32,16 +33,16 @@
     name: "{{ item }}"
     state: present
   register: elrepo_yum
-  with_items: "{{ elrepo_mktemp.stdout }}"
-  when: elrepo_get_url|success
+  with_items: "{{ elrepo_tempfile.path }}"
+  when: elrepo_get_url is success
 
 - name: Purging temporary package from filesystem
   file:
-    path: "{{ elrepo_mktemp.stdout }}"
+    path: "{{ elrepo_tempfile.path }}"
     state: absent
   when:
-    - elrepo_mktemp|success
-    - elrepo_yum|success
+    - elrepo_tempfile is success
+    - elrepo_yum is success
 
 - name: Applying elrepo repository configurations
   become: true
@@ -51,24 +52,26 @@
     owner: root
     group: root
     mode: 0644
-  when: elrepo_yum|success
+  when: elrepo_yum is success
 
 - name: Ensure that the ELRepo GPG keys are installed
   become: true
   rpm_key:
     key: /etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org
     state: present
-  when: elrepo_yum|success
+  when: elrepo_yum is success
 
 - name: Ensure that the required elrepo packages are installed
   become: true
   yum:
+    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
     disablerepo: "{{ elrepo_disablerepo|join(',') }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
     enablerepo: "{{ elrepo_enablerepo|join(',') }}"
     name: "{{ item }}"
     state: present
   with_items: "{{ elrepo_packages }}"
   when:
     - elrepo_packages|length > 0
-    - elrepo_yum|success
+    - elrepo_yum is success
 ...

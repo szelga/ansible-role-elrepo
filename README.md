@@ -13,7 +13,9 @@ None
 Available variables are listed below, along with default values:
 
     elrepo_dist: "{{ ansible_distribution_major_version }}"
+    elrepo_disable_plugin: []
     elrepo_disablerepo: []
+    elrepo_enable_plugin: []
     elrepo_enablerepo: []
     elrepo_kernel: false
     elrepo_kernel_version: lt
@@ -32,6 +34,8 @@ Available variables are listed below, along with default values:
     - hosts: servers
       roles:
         - role: linuxhq.elrepo
+          elrepo_disable_plugin:
+            - post-transaction-actions
           elrepo_enablerepo:
             - epel
           elrepo_kernel: true
