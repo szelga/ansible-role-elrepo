@@ -1,7 +1,5 @@
 ---
-allow_duplicates: true
-dependencies:
-  - linuxhq.epel
+dependencies: []
 galaxy_info:
   author: tkimball83
   description: RHEL/CentOS - ELRepo Project
@@ -14,6 +12,5 @@ galaxy_info:
         - 7
   galaxy_tags:
     - elrepo
-    - packaging
     - yum
 ...

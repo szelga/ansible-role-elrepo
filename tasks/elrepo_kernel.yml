@@ -1,5 +1,5 @@
 ---
-- name: Removing old kernel packages
+- name: Attempting to purge old kernel packages
   become: true
   yum:
     disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
@@ -50,7 +50,7 @@
     - elrepo_dist == '7'
     - elrepo_kernel_installed is changed
 
-- name: Set the default kernel grub is going to boot (el6)
+- name: Attempting to set the default grub kernel for el6
   become: true
   lineinfile:
     dest: /boot/grub/grub.conf
@@ -60,7 +60,7 @@
     - elrepo_dist == '6'
     - elrepo_kernel_installed is changed
 
-- name: Set the default kernel grub is going to boot (el7)
+- name: Attempting to set the default grub kernel for el7
   become: true
   command: |
     /usr/sbin/grub2-set-default 0

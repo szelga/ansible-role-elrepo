@@ -1,22 +1,22 @@
 ---
-- name: Setting elrepo_version fact (el7)
-  set_fact:
-    elrepo_version: "7.0-3.el7"
-  when: elrepo_dist == '7'
-
-- name: Setting elrepo_version fact (el6)
+- name: Attempting to set el6 elrepo_dist fact
   set_fact:
     elrepo_version: "6-8.el6"
   when: elrepo_dist == '6'
 
-- name: Attempting to create temporary file
+- name: Attempting to set el7 elrepo_dist fact
+  set_fact:
+    elrepo_version: "7.0-3.el7"
+  when: elrepo_dist == '7'
+
+- name: Attempting to generate temporary file
   tempfile:
     prefix: 'elrepo.'
     state: file
     suffix: '.rpm'
   register: elrepo_tempfile
 
-- name: Downloading package to temporary location
+- name: Attempting to download package to temporary location
   get_url:
     dest: "{{ elrepo_tempfile.path }}"
     force: yes
@@ -36,7 +36,7 @@
   register: elrepo_yum
   when: elrepo_get_url is success
 
-- name: Purging temporary package from filesystem
+- name: Attempting to purge temporary package from the filesystem
   file:
     path: "{{ elrepo_tempfile.path }}"
     state: absent
@@ -44,7 +44,7 @@
     - elrepo_tempfile is success
     - elrepo_yum is success
 
-- name: Applying elrepo repository configurations
+- name: Attempting to overlay elrepo repository configurations
   become: true
   template:
     src: elrepo.repo.j2
@@ -54,7 +54,7 @@
     mode: 0644
   when: elrepo_yum is success
 
-- name: Ensure that the ELRepo GPG keys are installed
+- name: Ensure that the elrepo gpg keys are installed
   become: true
   rpm_key:
     key: /etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org

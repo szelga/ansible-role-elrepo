@@ -1,12 +1,16 @@
 # ansible-role-elrepo
 
 [![Build Status](https://travis-ci.org/linuxhq/ansible-role-elrepo.svg?branch=master)](https://travis-ci.org/linuxhq/ansible-role-elrepo)
+[![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-elrepo-blue.svg?style=flat)](https://galaxy.ansible.com/linuxhq/elrepo)
+[![License](https://img.shields.io/badge/license-GPLv3-brightgreen.svg?style=flat)](COPYING)
 
 RHEL/CentOS - ELRepo Project
 
 ## Requirements
 
-None
+This role requires that you have the epel repository installed.
+
+ * https://galaxy.ansible.com/linuxhq/epel/
 
 ## Role Variables
 
@@ -27,7 +31,7 @@ Available variables are listed below, along with default values:
 
 ## Dependencies
 
- * https://galaxy.ansible.com/linuxhq/epel/
+None
 
 ## Example Playbook
 
