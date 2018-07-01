@@ -1,6 +1,7 @@
 ---
 dependencies: []
 galaxy_info:
+  role_name: elrepo
   author: tkimball83
   description: RHEL/CentOS - ELRepo Project
   license: GPLv3
@@ -12,5 +13,4 @@ galaxy_info:
         - 7
   galaxy_tags:
     - elrepo
-    - yum
 ...
