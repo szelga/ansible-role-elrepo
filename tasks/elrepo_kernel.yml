@@ -8,11 +8,13 @@
     enablerepo: "{{ elrepo_enablerepo|join(',') }}"
     name: "{{ item }}"
     state: absent
-  with_items:
+  loop:
     - kernel-devel
     - kernel-tools
     - kernel-tools-libs
     - kernel-headers
+  loop_control:
+    label: "{{ item }}"
 
 - name: Appending elrepo-kernel to elrepo_enablerepo list
   set_fact:
@@ -29,10 +31,12 @@
     name: "{{ item }}"
     state: present
   register: elrepo_kernel_installed
-  with_items:
+  loop:
     - "kernel-{{ elrepo_kernel_version }}"
     - "kernel-{{ elrepo_kernel_version }}-devel"
     - "kernel-{{ elrepo_kernel_version }}-headers"
+  loop_control:
+    label: "{{ item }}"
 
 - name: Ensure that the kernel tools packages are installed
   become: true
@@ -43,9 +47,11 @@
     enablerepo: "{{ elrepo_enablerepo|join(',') }}"
     name: "{{ item }}"
     state: present
-  with_items:
+  loop:
     - "kernel-{{ elrepo_kernel_version }}-tools"
     - "kernel-{{ elrepo_kernel_version }}-tools-libs"
+  loop_control:
+    label: "{{ item }}"
   when:
     - elrepo_dist == '7'
     - elrepo_kernel_installed is changed
@@ -77,7 +83,9 @@
     enablerepo: "{{ elrepo_enablerepo|join(',') }}"
     name: "{{ item }}"
     state: present
-  with_items: "{{ elrepo_packages }}"
+  loop: "{{ elrepo_packages }}"
+  loop_control:
+    label: "{{ item }}"
   when:
     - elrepo_packages|length > 0
     - elrepo_yum is success

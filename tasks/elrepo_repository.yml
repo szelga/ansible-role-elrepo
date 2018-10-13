@@ -70,7 +70,9 @@
     enablerepo: "{{ elrepo_enablerepo|join(',') }}"
     name: "{{ item }}"
     state: present
-  with_items: "{{ elrepo_packages }}"
+  loop: "{{ elrepo_packages }}"
+  loop_control:
+    label: "{{ item }}"
   when:
     - elrepo_packages|length > 0
     - elrepo_yum is success
