@@ -2,10 +2,10 @@
 - name: Attempting to purge old kernel packages
   become: true
   yum:
-    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
-    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
-    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
-    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    disable_plugin: "{{ elrepo_disable_plugin|join(',')|default([],true) }}"
+    disablerepo: "{{ elrepo_disablerepo|join(',')|default([],true) }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',')|default([],true) }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',')|default([],true) }}"
     name: "{{ item }}"
     state: absent
   loop:
@@ -24,10 +24,10 @@
 - name: Ensure that the elrepo kernel packages are installed
   become: true
   yum:
-    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
-    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
-    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
-    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    disable_plugin: "{{ elrepo_disable_plugin|join(',')|default([],true) }}"
+    disablerepo: "{{ elrepo_disablerepo|join(',')|default([],true) }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',')|default([],true) }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',')|default([],true) }}"
     name: "{{ item }}"
     state: present
   register: elrepo_kernel_installed
@@ -41,10 +41,10 @@
 - name: Ensure that the kernel tools packages are installed
   become: true
   yum:
-    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
-    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
-    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
-    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    disable_plugin: "{{ elrepo_disable_plugin|join(',')|default([],true) }}"
+    disablerepo: "{{ elrepo_disablerepo|join(',')|default([],true) }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',')|default([],true) }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',')|default([],true) }}"
     name: "{{ item }}"
     state: present
   loop:
@@ -77,10 +77,10 @@
 - name: Ensure that the required elrepo packages are installed
   become: true
   yum:
-    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
-    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
-    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
-    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    disable_plugin: "{{ elrepo_disable_plugin|join(',')|default([],true) }}"
+    disablerepo: "{{ elrepo_disablerepo|join(',')|default([],true) }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',')|default([],true) }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',')|default([],true) }}"
     name: "{{ item }}"
     state: present
   loop: "{{ elrepo_packages }}"
