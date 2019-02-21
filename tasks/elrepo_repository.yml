@@ -27,10 +27,10 @@
 - name: Ensure that the elrepo-release package is installed
   become: true
   yum:
-    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
-    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
-    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
-    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    disable_plugin: "{{ elrepo_disable_plugin|join(',')|default([],true) }}"
+    disablerepo: "{{ elrepo_disablerepo|join(',')|default([],true) }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',')|default([],true) }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',')|default([],true) }}"
     name: "{{ elrepo_tempfile.path }}"
     state: present
   register: elrepo_yum
@@ -64,10 +64,10 @@
 - name: Ensure that the required elrepo packages are installed
   become: true
   yum:
-    disable_plugin: "{{ elrepo_disable_plugin|join(',') }}"
-    disablerepo: "{{ elrepo_disablerepo|join(',') }}"
-    enable_plugin: "{{ elrepo_enable_plugin|join(',') }}"
-    enablerepo: "{{ elrepo_enablerepo|join(',') }}"
+    disable_plugin: "{{ elrepo_disable_plugin|join(',')|default([],true) }}"
+    disablerepo: "{{ elrepo_disablerepo|join(',')|default([],true) }}"
+    enable_plugin: "{{ elrepo_enable_plugin|join(',')|default([],true) }}"
+    enablerepo: "{{ elrepo_enablerepo|join(',')|default([],true) }}"
     name: "{{ item }}"
     state: present
   loop: "{{ elrepo_packages }}"
