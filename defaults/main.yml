@@ -1,5 +1,6 @@
 ---
 elrepo_dist: "{{ ansible_distribution_major_version }}"
+elrepo_version: "{{ '7.0-4.el7' if elrepo_dist == '7' else '6-9.el6' }}"
 elrepo_disable_plugin: []
 elrepo_disablerepo: []
 elrepo_enable_plugin: []
