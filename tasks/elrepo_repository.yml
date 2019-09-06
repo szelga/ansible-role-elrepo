@@ -1,12 +1,12 @@
 ---
 - name: Attempting to set el6 elrepo_dist fact
   set_fact:
-    elrepo_version: "6-8.el6"
+    elrepo_version: "6-9.el6"
   when: elrepo_dist == '6'
 
 - name: Attempting to set el7 elrepo_dist fact
   set_fact:
-    elrepo_version: "7.0-3.el7"
+    elrepo_version: "7.0-4.el7"
   when: elrepo_dist == '7'
 
 - name: Attempting to generate temporary file
