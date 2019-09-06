@@ -10,7 +10,7 @@
   get_url:
     dest: "{{ elrepo_tempfile.path }}"
     force: yes
-    url: "https://www.elrepo.org/elrepo-release-{{ elrepo_version }}.elrepo.noarch.rpm"
+    url: "https://www.elrepo.org/elrepo-release-{{ elrepo_version[elrepo_dist] }}.elrepo.noarch.rpm"
   register: elrepo_get_url
   when: elrepo_tempfile is success
 
