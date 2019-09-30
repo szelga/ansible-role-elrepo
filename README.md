@@ -17,12 +17,16 @@ This role requires that you have the epel repository installed.
 Available variables are listed below, along with default values:
 
     elrepo_dist: "{{ ansible_distribution_major_version }}"
+    elrepo_version:
+      '6': 6-9.el6
+      '7': 7.0-4.el7
+      '8': 8.0-2.el8
     elrepo_disable_plugin: []
     elrepo_disablerepo: []
     elrepo_enable_plugin: []
     elrepo_enablerepo: []
     elrepo_kernel: false
-    elrepo_kernel_version: lt
+    elrepo_kernel_version: ml
     elrepo_packages: []
     elrepo_repository_elrepo: false
     elrepo_repository_extras: false
@@ -43,7 +47,7 @@ None
           elrepo_enablerepo:
             - epel
           elrepo_kernel: true
-          elrepo_kernel_version: ml
+          elrepo_kernel_version: lt
           elrepo_packages:
             - dkms
             - kmod-r8168
