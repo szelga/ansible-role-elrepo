@@ -21,6 +21,12 @@
     elrepo_enablerepo: "{{ elrepo_enablerepo }} + [ 'elrepo-kernel' ]"
   when: "'elrepo-kernel' not in elrepo_enablerepo"
 
+- name: Setup new value in DEFAULTKERNEL variable in /etc/sysconfig/kernel
+  replace:
+    path: /etc/sysconfig/kernel
+    regexp: '^DEFAULTKERNEL=kernel.*'
+    replace: "DEFAULTKERNEL=kernel-{{ elrepo_kernel_version }}"
+
 - name: Ensure that the elrepo kernel packages are installed
   become: true
   yum:
@@ -52,24 +58,6 @@
     - "kernel-{{ elrepo_kernel_version }}-tools-libs"
   loop_control:
     label: "{{ item }}"
-  when:
-    - elrepo_dist == '7'
-    - elrepo_kernel_installed is changed
-
-- name: Attempting to set the default grub kernel for el6
-  become: true
-  lineinfile:
-    dest: /boot/grub/grub.conf
-    regexp: '^default='
-    line: 'default=0'
-  when:
-    - elrepo_dist == '6'
-    - elrepo_kernel_installed is changed
-
-- name: Attempting to set the default grub kernel for el7
-  become: true
-  command: |
-    /usr/sbin/grub2-set-default 0
   when:
     - elrepo_dist == '7'
     - elrepo_kernel_installed is changed
