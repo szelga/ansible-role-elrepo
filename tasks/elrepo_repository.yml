@@ -14,6 +14,11 @@
   register: elrepo_get_url
   when: elrepo_tempfile is success
 
+- name: Ensure that the elrepo gpg keys are installed
+  rpm_key:
+    key: https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+    state: present
+
 - name: Ensure that the elrepo-release package is installed
   become: true
   yum:
@@ -42,13 +47,6 @@
     owner: root
     group: root
     mode: 0644
-  when: elrepo_yum is success
-
-- name: Ensure that the elrepo gpg keys are installed
-  become: true
-  rpm_key:
-    key: /etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org
-    state: present
   when: elrepo_yum is success
 
 - name: Ensure that the required elrepo packages are installed
